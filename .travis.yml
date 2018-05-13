@@ -14,12 +14,14 @@
 # KIND, either express or implied.  See the License for the
 # specific language governing permissions and limitations
 # under the License.
+
 language: java
-jdk:
-  - oraclejdk8
-script:
-  - ant -quiet rat -Drat-report.haltonfailure=true
-  - ant -quiet build -Djavac.compilerargs=-nowarn -Dbuild.compiler.deprecation=false
-  - ant -quiet test -Djavac.compilerargs=-nowarn -Dbuild.compiler.deprecation=false -Dtest.includes=NoTestsJustBuild
-  - ant -quiet verify-libs-and-licenses -Dverify-libs-and-licenses.haltonfailure=true
-  - ./travis-check-line-endings.sh
+services:
+- docker
+
+jobs:
+  include:
+  - script: docker run ubuntu:trusty /bin/sh -c "apt-get update && apt-get install --yes ant git software-properties-common && add-apt-repository --yes ppa:openjdk-r/ppa && apt-get update && apt-get install --yes openjdk-8-jdk && export JAVA_HOME=/usr/lib/jvm/java-8-openjdk-amd64 && git clone --depth 50 --recurse-submodules --branch=$TRAVIS_BRANCH https://github.com/$TRAVIS_REPO_SLUG.git && cd incubator-netbeans && ant -quiet rat -Drat-report.haltonfailure=true && ant -quiet build -Djavac.compilerargs=-nowarn -Dbuild.compiler.deprecation=false && ant -quiet test -Djavac.compilerargs=-nowarn -Dbuild.compiler.deprecation=false -Dtest.includes=NoTestsJustBuild && ant -quiet verify-libs-and-licenses -Dverify-libs-and-licenses.haltonfailure=true && ./travis-check-line-endings.sh"
+  - script: docker run ubuntu:xenial /bin/sh -c "apt-get update && apt-get install --yes ant git openjdk-8-jdk && export JAVA_HOME=/usr/lib/jvm/java-8-openjdk-amd64 && git clone --depth 50 --recurse-submodules --branch=$TRAVIS_BRANCH https://github.com/$TRAVIS_REPO_SLUG.git && cd incubator-netbeans && ant -quiet rat -Drat-report.haltonfailure=true && ant -quiet build -Djavac.compilerargs=-nowarn -Dbuild.compiler.deprecation=false && ant -quiet test -Djavac.compilerargs=-nowarn -Dbuild.compiler.deprecation=false -Dtest.includes=NoTestsJustBuild && ant -quiet verify-libs-and-licenses -Dverify-libs-and-licenses.haltonfailure=true && ./travis-check-line-endings.sh"
+  - script: docker run ubuntu:artful /bin/sh -c "apt-get update && apt-get install --yes ant git openjdk-8-jdk && export JAVA_HOME=/usr/lib/jvm/java-8-openjdk-amd64 && git clone --depth 50 --recurse-submodules --branch=$TRAVIS_BRANCH https://github.com/$TRAVIS_REPO_SLUG.git && cd incubator-netbeans && ant -quiet rat -Drat-report.haltonfailure=true && ant -quiet build -Djavac.compilerargs=-nowarn -Dbuild.compiler.deprecation=false && ant -quiet test -Djavac.compilerargs=-nowarn -Dbuild.compiler.deprecation=false -Dtest.includes=NoTestsJustBuild && ant -quiet verify-libs-and-licenses -Dverify-libs-and-licenses.haltonfailure=true && ./travis-check-line-endings.sh"
+  - script: docker run ubuntu:bionic /bin/sh -c "apt-get update && apt-get install --yes ant git openjdk-8-jdk && export JAVA_HOME=/usr/lib/jvm/java-8-openjdk-amd64 && git clone --depth 50 --recurse-submodules --branch=$TRAVIS_BRANCH https://github.com/$TRAVIS_REPO_SLUG.git && cd incubator-netbeans && ant -quiet rat -Drat-report.haltonfailure=true && ant -quiet build -Djavac.compilerargs=-nowarn -Dbuild.compiler.deprecation=false && ant -quiet test -Djavac.compilerargs=-nowarn -Dbuild.compiler.deprecation=false -Dtest.includes=NoTestsJustBuild && ant -quiet verify-libs-and-licenses -Dverify-libs-and-licenses.haltonfailure=true && ./travis-check-line-endings.sh"
